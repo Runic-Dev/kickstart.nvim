@@ -478,6 +478,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>T<CR>', function()
         neotest.run.run()
       end, { desc = 'Runs the nearest [T]est' })
+      vim.keymap.set('n', '<leader>Td<CR>', function()
+        neotest.run.run { strategy = 'dap' }
+      end, { desc = 'Runs the nearest [T]est in [D]ebug mode' })
       vim.keymap.set('n', '<leader>Tf', function()
         neotest.run.run(vim.fn.expand '%')
       end, { desc = 'Runs the [T]ests for the [f]ile' })
@@ -971,7 +974,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
