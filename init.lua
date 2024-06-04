@@ -371,11 +371,9 @@ require('lazy').setup({
           'MunifTanjim/nui.nvim',
           '3rd/image.nvim', -- Optional image support in preview window: See `# Preview Mode` for more information
         },
-        opts = {
-          setup = function()
-            vim.keymap.set('n', '<leader>F', '<cmd>Neotree toggle<CR>', { desc = 'Toggles file tree' })
-          end,
-        },
+        config = function()
+          vim.keymap.set('n', '<leader>F', '<cmd>Neotree toggle<CR>', { desc = 'Toggles the file tree' })
+        end,
       },
     },
     config = function()
