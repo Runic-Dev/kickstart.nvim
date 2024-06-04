@@ -440,9 +440,51 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
+  {
+    'nvim-neotest/neotest',
+    dependencies = {
+      'nvim-neotest/nvim-nio',
+      'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'mrcjkb/rustaceanvim',
+    },
+    config = function()
+      local neotest = require 'neotest'
 
+      neotest.setup {
+        adapters = {
+          require 'rustaceanvim.neotest',
+        },
+      }
+
+      vim.keymap.set('n', '<leader>T<CR>', function()
+        neotest.run.run()
+      end, { desc = 'Runs the nearest [T]est' })
+      vim.keymap.set('n', '<leader>Tf', function()
+        neotest.run.run(vim.fn.expand '%')
+      end, { desc = 'Runs the [T]ests for the [f]ile' })
+      vim.keymap.set('n', '<leader>TT', function()
+        neotest.summary.toggle()
+      end, { desc = '[T]oggle the [T]ests summary' })
+      vim.keymap.set('n', '<leader>To', function()
+        neotest.output.open { enter = true }
+      end, { desc = 'Opens the [T]est [o]utput' })
+      vim.keymap.set('n', '<leader>Tl', function()
+        neotest.run.run_last()
+      end, { desc = 'Reruns the [T]est [l]ast run' })
+    end,
+  },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    opts = {
+      setup = {
+        -- Tries to stop setup on nvim-lspconfig as it causes conflict with rustaceanvim
+        rust_analyzer = function()
+          return true
+        end,
+      },
+    },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
@@ -601,7 +643,12 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {
+          cmd = function()
+            return true
+          end,
+          settings = {},
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -645,6 +692,7 @@ require('lazy').setup({
 
       require('mason-lspconfig').setup {
         handlers = {
+          rust_analyzer = function() end,
           function(server_name)
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
