@@ -239,7 +239,6 @@ require('lazy').setup({
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -302,7 +301,27 @@ require('lazy').setup({
   -- you do for a plugin at the top level, you can do for a dependency.
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
+  {
+    'kdheepak/lazygit.nvim',
+    opts = {
+      cmd = {
+        'LazyGit',
+        'LazyGitConfig',
+        'LazyGitCurrentFile',
+        'LazyGitFilter',
+        'LazyGitFilterCurrentFile',
+      },
+      dependencies = {
+        'nvim-lua/plenary.nvim',
+      },
+      keys = {
+        { '<leader>g', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+      },
+    },
+    config = function()
+      vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = '[G]it' })
+    end,
+  },
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -784,7 +803,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'slate'
+      vim.cmd.colorscheme 'tokyonight'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
