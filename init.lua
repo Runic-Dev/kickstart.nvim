@@ -224,10 +224,21 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  {
+    'nvim-tree/nvim-tree.lua',
+    config = function()
+      local tree = require 'nvim-tree'
+      tree.setup {}
+      vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggles the Nvim Tree' })
+    end,
+  },
   {
     'rose-pine/neovim',
     name = 'rose-pine',
