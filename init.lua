@@ -1,5 +1,4 @@
 --[[
-
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -927,5 +926,12 @@ require('lazy').setup({
   },
 })
 
+--  NOTE: Sets the background to transparent
+vim.api.nvim_command 'highlight Normal guibg=NONE ctermbg=NONE'
+vim.api.nvim_command 'highlight NormalNC guibg=NONE ctermbg=NONE'
+vim.api.nvim_command 'highlight EndOfBuffer guibg=NONE ctermbg=NONE'
+vim.api.nvim_command 'highlight NvimTreeNormal guibg=NONE ctermbg=NONE'
+vim.api.nvim_command 'highlight NvimTreeNormalNC guibg=NONE ctermbg=NONE'
+vim.o.termguicolors = true
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
