@@ -373,6 +373,7 @@ require('lazy').setup({
         },
         config = function()
           vim.keymap.set('n', '<leader>F', '<cmd>Neotree toggle<CR>', { desc = 'Toggles the file tree' })
+          vim.keymap.set('n', '<leader>FR', '<cmd>Neotree reveal<CR>', { desc = 'Toggles the file tree' })
         end,
       },
     },
