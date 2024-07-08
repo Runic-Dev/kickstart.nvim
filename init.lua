@@ -144,6 +144,9 @@ vim.opt.splitbelow = true
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
 
@@ -152,6 +155,8 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
+
+vim.wo.wrap = false
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -224,9 +229,6 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -372,8 +374,8 @@ require('lazy').setup({
           '3rd/image.nvim', -- Optional image support in preview window: See `# Preview Mode` for more information
         },
         config = function()
-          vim.keymap.set('n', '<leader>F', '<cmd>Neotree toggle<CR>', { desc = 'Toggles the file tree' })
-          vim.keymap.set('n', '<leader>FR', '<cmd>Neotree reveal<CR>', { desc = 'Toggles the file tree' })
+          vim.keymap.set('n', '<leader>FF', '<cmd>Neotree toggle<CR>', { desc = 'Toggles the file tree' })
+          vim.keymap.set('n', '<leader>FR', '<cmd>Neotree reveal<CR>', { desc = 'Toggles the file tree on current file' })
         end,
       },
     },
@@ -465,6 +467,7 @@ require('lazy').setup({
       'antoinemadec/FixCursorHold.nvim',
       'nvim-treesitter/nvim-treesitter',
       'mrcjkb/rustaceanvim',
+      'Issafalcon/neotest-dotnet',
     },
     config = function()
       local neotest = require 'neotest'
@@ -472,6 +475,12 @@ require('lazy').setup({
       neotest.setup {
         adapters = {
           require 'rustaceanvim.neotest',
+          require 'neotest-dotnet' {
+            dap = {
+              adapter_name = 'coreclr',
+            },
+            discovery_root = 'solution',
+          },
         },
       }
 
@@ -969,11 +978,6 @@ require('lazy').setup({
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
 
-  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-  --
-  --  Here are some example plugins that I've included in the Kickstart repository.
-  --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  --
   require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
@@ -981,6 +985,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
+  -- require 'Cliffback/netcoredbg-macOS-arm64.nvim',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
