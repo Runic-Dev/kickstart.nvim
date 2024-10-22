@@ -141,8 +141,9 @@ vim.opt.splitbelow = true
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- vim.opt.listchars = { trail = '·' }
 
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -233,6 +234,30 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  {
+    'ThePrimeagen/harpoon',
+    opts = {
+      global_settings = {
+        save_on_toggle = false,
+        save_on_change = true,
+        enter_on_sendcmd = false,
+        tmux_autoclose_windows = false,
+        excluded_filetypes = { 'harpoon' },
+        mark_branch = false,
+      },
+    },
+    config = function(_, opts)
+      require('harpoon').setup(opts)
+      vim.api.nvim_set_keymap('n', '<leader>aa', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>a.', ":lua require('harpoon.mark').add_file()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>ah', ":lua require('harpoon.ui').nav_file(1)<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>aj', ":lua require('harpoon.ui').nav_file(2)<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>ak', ":lua require('harpoon.ui').nav_file(3)<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>al', ":lua require('harpoon.ui').nav_file(4)<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>an', ":lua require('harpoon.ui').nav_next()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', '<leader>ap', ":lua require('harpoon.ui').nav_prev()<CR>", { noremap = true, silent = true })
+    end,
+  },
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -405,11 +430,9 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          path_display = { 'smart' },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -426,7 +449,9 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sf', function()
+        require('telescope.builtin').find_files { hidden = true, no_ignore = true }
+      end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -504,6 +529,7 @@ require('lazy').setup({
       end, { desc = 'Reruns the [T]est [l]ast run' })
     end,
   },
+  'jwalton512/vim-blade',
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     opts = {
