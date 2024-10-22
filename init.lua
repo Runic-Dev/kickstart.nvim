@@ -301,6 +301,14 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
+    config = function(_, opts)
+      local ok, gitsigns = pcall(require, 'gitsigns')
+      if not ok then
+        return
+      end
+
+      gitsigns.setup(opts)
+    end,
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
