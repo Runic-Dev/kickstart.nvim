@@ -1007,6 +1007,32 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+  {
+    'tpope/vim-dadbod',
+    cmd = { 'DB', 'DBUI', 'DBUIToggle', 'DBUIFindBuffer', 'DBUIRenameBuffer', 'DBUIAddConnection' },
+  },
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = { 'tpope/vim-dadbod' },
+    cmd = { 'DBUI', 'DBUIToggle' },
+    config = function()
+      vim.g.db_ui_save_location = '~/.config/nvim/dadbod/' -- Customize path to store DBUI settings
+    end,
+  },
+  {
+    'kristijanhusak/vim-dadbod-completion',
+    dependencies = { 'tpope/vim-dadbod' },
+    lazy = true,
+    config = function()
+      -- Enable dadbod completion
+      vim.cmd [[
+                augroup dadbod_completion
+                    au!
+                    au FileType sql setlocal omnifunc=vim_dadbod_completion#omni
+                augroup END
+            ]]
+    end,
+  },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -1048,6 +1074,11 @@ require('lazy').setup({
   },
 })
 
+vim.keymap.set('n', '<leader>++', ':DBUIToggle<CR>', { desc = '[D]adbod [U]I Toggle', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+q', ':DB<CR>', { desc = '[D]adbod Open [Q]uery Window', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+f', ':DBUIFindBuffer<CR>', { desc = '[D]adbod [F]ind Buffer', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+a', ':DBUIAddConnection<CR>', { desc = '[D]adbod [A]dd Connection', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+r', ':DBUIRenameBuffer<CR>', { desc = '[D]adbod [R]ename Buffer', noremap = true, silent = true })
 --  NOTE: Sets the background to transparent
 vim.api.nvim_command 'highlight Normal guibg=NONE ctermbg=NONE'
 vim.api.nvim_command 'highlight NormalNC guibg=NONE ctermbg=NONE'
