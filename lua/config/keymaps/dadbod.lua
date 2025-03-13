@@ -1,0 +1,5 @@
+vim.keymap.set('n', '<leader>++', ':DBUIToggle<CR>', { desc = '[D]adbod [U]I Toggle', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+q', ':DB<CR>', { desc = '[D]adbod Open [Q]uery Window', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+f', ':DBUIFindBuffer<CR>', { desc = '[D]adbod [F]ind Buffer', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+a', ':DBUIAddConnection<CR>', { desc = '[D]adbod [A]dd Connection', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>+r', ':DBUIRenameBuffer<CR>', { desc = '[D]adbod [R]ename Buffer', noremap = true, silent = true })
