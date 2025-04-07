@@ -13,6 +13,58 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 vim.keymap.set('n', '<leader><CR>', '<cmd>sp +term | resize 15 <CR>', { desc = 'Opens a terminal' })
 
 require('lazy').setup({
+  {
+    'folke/noice.nvim',
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify',
+    },
+    config = function()
+      require('noice').setup {
+        cmdline = {
+          enabled = true, -- Enable floating command-line
+          view = 'cmdline_popup', -- Use floating modal style
+        },
+      }
+    end,
+  },
+  {
+    'mrcjkb/rustaceanvim',
+    ft = 'rust',
+    config = function()
+      vim.g.rustaceanvim = {
+        server = {
+          -- cmd = { '/Users/runic/.config/nvim/lsp-alt/rust-analyzer' },
+          cargo = {
+            features = { 'ssr' },
+          },
+          root_dir = function(fname)
+            return require('lspconfig.util').root_pattern 'Cargo.toml'(fname)
+          end,
+          settings = {
+            ['rust-analyzer'] = {
+              procMacro = {
+                enable = true,
+              },
+              checkOnSave = {
+                command = 'clippy',
+              },
+              files = {
+                excludeDirs = {
+                  'target',
+                  'node_modules',
+                  -- '/Users/runic/.cargo',
+                  -- '/Users/runic/code/podswap', -- non-rust
+                  -- '/Users/runic/code/dotnet_stuff', -- non-rust
+                },
+              },
+            },
+          },
+        },
+      }
+    end,
+  },
+
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'rcarriga/nvim-notify',
   { import = 'config.plugins' },
@@ -378,7 +430,7 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      -- require('mason').setup()
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
@@ -386,6 +438,14 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
+      local mason_registry = require 'mason-registry'
+      mason_registry.refresh(function()
+        require('mason-tool-installer').setup {
+          ensure_installed = ensure_installed,
+          auto_update = false,
+          run_on_start = true,
+        }
+      end)
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
@@ -540,7 +600,8 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'retrobox'
+      -- vim.cmd.colorscheme 'retrobox'
+      vim.cmd.colorscheme 'tokyonight-night'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
